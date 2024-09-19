@@ -1,0 +1,15 @@
+const int relayPin = 7;  // 릴레이 제어 핀
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+}
+
+void loop() {
+  // 밸브 열기 (릴레이 활성화)
+  digitalWrite(relayPin, HIGH);
+  delay(5000);
+
+  // 밸브 닫기 (릴레이 비활성화)
+  digitalWrite(relayPin, LOW);
+  delay(5000);
+}
