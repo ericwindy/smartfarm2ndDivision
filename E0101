@@ -1,1 +1,34 @@
-...
+#include "DHT.h"
+
+#define DHTPIN 2     // DHT11 센서가 연결된 핀
+#define DHTTYPE DHT11   // DHT11 유형 정의
+
+DHT dht(DHTPIN, DHTTYPE);  // DHT 객체 생성
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();  // DHT 센서 초기화
+}
+
+void loop() {
+  // DHT11은 느린 센서이므로 약간의 지연을 둠
+  delay(2000);
+
+  // 온도와 습도 값을 읽음
+  float humidity = dht.readHumidity();
+  float temperature = dht.readTemperature();
+
+  // 오류 체크 (NaN 값 확인)
+  if (isnan(humidity) || isnan(temperature)) {
+    Serial.println("DHT11 센서로부터 데이터를 읽을 수 없습니다.");
+    return;
+  }
+
+  // 온도와 습도 출력
+  Serial.print("습도: ");
+  Serial.print(humidity);
+  Serial.print(" %\t");
+  Serial.print("온도: ");
+  Serial.print(temperature);
+  Serial.println(" °C");
+}
