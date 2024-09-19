@@ -1,0 +1,32 @@
+#include <Wire.h>
+#include <Adafruit_VL53L0X.h>
+
+// VL53L0X 객체 생성
+Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+
+void setup() {
+  Serial.begin(9600);
+
+  // VL53L0X 초기화
+  if (!lox.begin()) {
+    Serial.println("Failed to initialize VL53L0X sensor!");
+    while (1);
+  }
+  Serial.println("VL53L0X Sensor Initialized");
+}
+
+void loop() {
+  VL53L0X_RangingMeasurementData_t measure;
+
+  // 거리 측정
+  lox.rangingTest(&measure, false);
+
+  if (measure.RangeStatus != 4) {  // 4는 거리 측정 오류 상태
+    Serial.print("Distance (mm): ");
+    Serial.println(measure.RangeMilliMeter);
+  } else {
+    Serial.println("Out of range");
+  }
+
+  delay(1000);  // 1초 간격으로 측정
+}
