@@ -1,0 +1,54 @@
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_AHTX0.h>
+#include <ENS160.h>
+
+Adafruit_AHTX0 aht; // AHT21 온도 및 습도 센서 초기화
+
+ENS160 ens160; // ENS160 공기질 센서 초기화
+
+void setup() {
+  Serial.begin(9600);
+  
+  // AHT21 초기화
+  if (!aht.begin()) {
+    Serial.println("Failed to initialize AHT21!");
+    while (1);
+  }
+  
+  // ENS160 초기화
+  if (!ens160.begin()) {
+    Serial.println("Failed to initialize ENS160!");
+    while (1);
+  }
+}
+
+void loop() {
+  // AHT21 데이터 읽기
+  sensors_event_t humidity, temperature;
+  aht.getEvent(&humidity, &temperature);
+  
+  // ENS160 데이터 읽기
+  float tvoc, co2eq;
+  tvoc = ens160.getTVOC();
+  co2eq = ens160.getCO2eq();
+
+  // 데이터 출력
+  Serial.print("Temperature: ");
+  Serial.print(temperature.temperature);
+  Serial.println(" °C");
+  
+  Serial.print("Humidity: ");
+  Serial.print(humidity.relative_humidity);
+  Serial.println(" %");
+  
+  Serial.print("TVOC: ");
+  Serial.print(tvoc);
+  Serial.println(" ppb");
+  
+  Serial.print("CO2eq: ");
+  Serial.print(co2eq);
+  Serial.println(" ppm");
+
+  delay(2000);  // 2초 대기
+}
