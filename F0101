@@ -1,0 +1,32 @@
+const int s0 = 2; // MUX 선택 핀
+const int s1 = 3;
+const int s2 = 4;
+const int s3 = 5;
+const int signalPin = A0; // MUX 신호 핀
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(s0, OUTPUT);
+  pinMode(s1, OUTPUT);
+  pinMode(s2, OUTPUT);
+  pinMode(s3, OUTPUT);
+}
+
+void loop() {
+  for (int channel = 0; channel < 16; channel++) {
+    // 선택 핀 설정
+    digitalWrite(s0, bitRead(channel, 0));
+    digitalWrite(s1, bitRead(channel, 1));
+    digitalWrite(s2, bitRead(channel, 2));
+    digitalWrite(s3, bitRead(channel, 3));
+    
+    // 데이터 읽기
+    int sensorValue = analogRead(signalPin);
+    Serial.print("Channel ");
+    Serial.print(channel);
+    Serial.print(": ");
+    Serial.println(sensorValue);
+    
+    delay(1000); // 1초 대기
+  }
+}
