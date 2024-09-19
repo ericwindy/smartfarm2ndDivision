@@ -1,0 +1,27 @@
+const int pH_PIN = A0;  // pH 센서가 연결된 아날로그 핀
+float voltage, pHValue;
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작
+}
+
+void loop() {
+  // pH 센서에서 아날로그 값을 읽음
+  int sensorValue = analogRead(pH_PIN);
+  
+  // 아날로그 값을 전압 값으로 변환
+  voltage = sensorValue * (5.0 / 1024.0);  // 5V 기준, 10비트 ADC 변환
+  
+  // pH 계산
+  // 이 공식은 센서의 보정 데이터에 따라 달라질 수 있습니다.
+  // 일반적으로 pH 센서는 0V ~ 5V 범위에서 pH 0 ~ 14를 출력합니다.
+  pHValue = 3.5 * voltage;  // 보정 후 사용자는 이 값을 조정해야 할 수 있음
+  
+  // 결과 출력
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.print(" V, pH Value: ");
+  Serial.println(pHValue);
+  
+  delay(1000);  // 1초 대기
+}
