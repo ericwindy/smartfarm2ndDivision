@@ -1,0 +1,24 @@
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+#define ONE_WIRE_BUS 2  // DS18B20이 연결된 핀 (DQ 핀)
+
+OneWire oneWire(ONE_WIRE_BUS);  // OneWire 객체 생성
+DallasTemperature sensors(&oneWire);  // DallasTemperature 객체 생성
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작
+  sensors.begin();  // DS18B20 센서 시작
+}
+
+void loop() {
+  sensors.requestTemperatures();  // 온도 요청
+  float temperatureC = sensors.getTempCByIndex(0);  // 온도를 섭씨로 읽기
+  
+  // 출력
+  Serial.print("Temperature: ");
+  Serial.print(temperatureC);
+  Serial.println(" °C");
+  
+  delay(1000);  // 1초 대기
+}
