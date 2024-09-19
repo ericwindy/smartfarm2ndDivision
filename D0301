@@ -1,0 +1,52 @@
+#define TRIG_PIN 9  // 트리거 핀
+#define ECHO_PIN 10 // 에코 핀
+#define MAX_TANK_HEIGHT 500.0 // 물탱크의 최대 높이 (mm)
+
+void setup() {
+    Serial.begin(9600); // 시리얼 통신을 위한 초기화
+    pinMode(TRIG_PIN, OUTPUT); // 트리거 핀을 출력으로 설정
+    pinMode(ECHO_PIN, INPUT);  // 에코 핀을 입력으로 설정
+
+    Serial.println("Water Level Measurement using HC-SR04");
+}
+
+void loop() {
+    float distance = measureDistance(); // 거리 측정
+    float waterLevel = MAX_TANK_HEIGHT - distance; // 수위 계산
+
+    // 수위가 유효 범위 내에 있는지 확인 (0 <= waterLevel <= 500)
+    if (waterLevel < 0) {
+        waterLevel = 0;
+    } else if (waterLevel > MAX_TANK_HEIGHT) {
+        waterLevel = MAX_TANK_HEIGHT;
+    }
+
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.print(" mm, Water Level: ");
+    Serial.print(waterLevel);
+    Serial.println(" mm");
+
+    delay(1000); // 1초 간격으로 업데이트
+}
+
+// 초음파 센서를 사용하여 거리를 측정하는 함수
+float measureDistance() {
+    long duration;
+    float distance;
+
+    // 트리거 핀을 짧게 LOW로 설정한 후 HIGH로 설정하여 초음파 펄스를 발생시킵니다.
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+
+    // 에코 핀에서 신호를 수신하여 펄스 길이(반환 시간)를 측정합니다.
+    duration = pulseIn(ECHO_PIN, HIGH);
+
+    // 거리를 계산합니다 (거리 = 시간 * 속도 / 2). 초음파 속도는 약 343m/s 또는 0.0343cm/μs입니다.
+    distance = (duration * 0.0343) / 2.0;
+
+    return distance;
+}
