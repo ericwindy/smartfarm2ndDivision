@@ -1,0 +1,29 @@
+const int TDS_PIN = A0;  // TDS 센서가 연결된 아날로그 핀
+float voltage, tdsValue;
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작
+}
+
+void loop() {
+  // TDS 센서에서 값을 읽음
+  int sensorValue = analogRead(TDS_PIN);
+  
+  // 아날로그 값을 전압 값으로 변환
+  voltage = sensorValue * (5.0 / 1024.0);
+  
+  // TDS 계산: 일반적으로 TDS는 전압에 비례하여 계산됩니다.
+  // TDS = (전압 * 상수값). 여기서 상수는 교정된 값입니다.
+  tdsValue = (133.42 * voltage * voltage * voltage 
+              - 255.86 * voltage * voltage 
+              + 857.39 * voltage) * 0.5;  // 0.5는 500ppm용 보정 값
+  
+  // 결과 출력
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.print(" V, TDS Value: ");
+  Serial.print(tdsValue);
+  Serial.println(" ppm");
+  
+  delay(1000);  // 1초 대기
+}
