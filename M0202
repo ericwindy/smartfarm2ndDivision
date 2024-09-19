@@ -1,0 +1,22 @@
+const int EN1 = 5;  // 모터 1 속도 제어
+const int IN1 = 9;
+const int IN2 = 8;
+
+void setup() {
+  pinMode(EN1, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+}
+
+void loop() {
+  analogWrite(EN1, 200);  // 모터 속도 설정 (0-255)
+  digitalWrite(IN1, HIGH);  // 모터 순방향
+  digitalWrite(IN2, LOW);
+  
+  delay(5000);
+  
+  digitalWrite(IN1, LOW);  // 모터 정지
+  digitalWrite(IN2, LOW);
+  
+  delay(5000);
+}
