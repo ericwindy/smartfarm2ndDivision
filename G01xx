@@ -1,0 +1,24 @@
+#include <Wire.h>
+
+const int sensorAddress = 0x48; // 센서의 I2C 주소 (예시)
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin(); // I2C 버스 초기화
+}
+
+void loop() {
+  Wire.beginTransmission(sensorAddress);
+  Wire.write(0x00); // 센서의 특정 레지스터를 읽기 위해
+  Wire.endTransmission();
+  
+  Wire.requestFrom(sensorAddress, 2); // 2바이트 데이터 요청
+  
+  if (Wire.available() == 2) {
+    int value = Wire.read() << 8 | Wire.read(); // 데이터 읽기
+    Serial.print("Sensor Value: ");
+    Serial.println(value);
+  }
+  
+  delay(1000); // 1초 대기
+}
