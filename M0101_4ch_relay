@@ -1,0 +1,16 @@
+const int relay1 = 6;  // 릴레이 1 제어 핀
+const int relay2 = 7;  // 릴레이 2 제어 핀
+const int relay3 = 8;  // 릴레이 3 제어 핀
+
+void setup() {
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  pinMode(relay3, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(relay1, HIGH);  // 펌프 1 가동
+  delay(5000);  // 5초 동안 펌프 작동
+  digitalWrite(relay1, LOW);   // 펌프 1 정지
+  delay(5000);
+}
