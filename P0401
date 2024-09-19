@@ -1,0 +1,30 @@
+#include <Wire.h>
+#include <INA226.h>
+
+INA226 ina226;
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  ina226.begin();
+}
+
+void loop() {
+  float voltage = ina226.getBusVoltage_V();  // 버스 전압 측정
+  float current = ina226.getCurrent_mA();    // 전류 측정
+  float power = ina226.getPower_mW();        // 전력 측정
+  
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.println(" V");
+
+  Serial.print("Current: ");
+  Serial.print(current);
+  Serial.println(" mA");
+
+  Serial.print("Power: ");
+  Serial.print(power);
+  Serial.println(" mW");
+
+  delay(2000);  // 2초마다 측정값 출력
+}
