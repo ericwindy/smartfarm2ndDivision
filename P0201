@@ -1,0 +1,12 @@
+const int relayPin = 7;  // 릴레이 제어 핀
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(relayPin, HIGH);  // 릴레이 활성화 (장치 켜짐)
+  delay(5000);                   // 5초간 동작
+  digitalWrite(relayPin, LOW);   // 릴레이 비활성화 (장치 꺼짐)
+  delay(5000);                   // 5초간 대기
+}
