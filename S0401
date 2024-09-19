@@ -1,0 +1,32 @@
+const int trigPin = 9;  // Trig 핀이 연결된 디지털 핀
+const int echoPin = 10; // Echo 핀이 연결된 디지털 핀
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작
+  pinMode(trigPin, OUTPUT);  // Trig 핀을 출력으로 설정
+  pinMode(echoPin, INPUT);   // Echo 핀을 입력으로 설정
+}
+
+void loop() {
+  // 트리거 핀을 통해 초음파 펄스 발사
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Echo 핀으로부터 신호 수신 후 걸린 시간 측정
+  long duration = pulseIn(echoPin, HIGH);
+  
+  // 시간을 거리로 변환 (소리의 속도 = 343 m/s)
+  // duration은 왕복 시간임으로, 거리는 (duration / 2) * 소리의 속도
+  // 단위는 cm로 변환 (34300 cm/s)
+  long distance = duration * 0.034 / 2;
+  
+  // 결과 출력
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  delay(500);  // 0.5초 대기
+}
