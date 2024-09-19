@@ -1,0 +1,28 @@
+#include <Wire.h>
+#include <BH1750.h>
+
+// BH1750 객체 생성
+BH1750 lightMeter;
+
+void setup() {
+  Serial.begin(9600);  // 시리얼 통신 시작
+  Wire.begin();        // I2C 통신 시작
+
+  // BH1750 센서 초기화
+  if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE)) {
+    Serial.println("BH1750 초기화 성공");
+  } else {
+    Serial.println("BH1750 초기화 실패. 센서를 확인하세요.");
+    while (1);
+  }
+}
+
+void loop() {
+  // 조도 값 읽기 (lx 단위)
+  float lux = lightMeter.readLightLevel();
+
+  Serial.print("조도 (lx): ");
+  Serial.println(lux);
+
+  delay(1000); // 1초 대기 후 다시 측정
+}
