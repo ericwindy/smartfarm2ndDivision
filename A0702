@@ -1,0 +1,65 @@
+#include <SPI.h>
+#include <SD.h>
+#include <Wire.h>
+#include "RTClib.h"
+
+// 핀 설정
+const int chipSelect = 10;
+RTC_DS1307 rtc;
+
+void setup() {
+  Serial.begin(9600);
+  
+  // SD 카드 초기화
+  if (!SD.begin(chipSelect)) {
+    Serial.println("SD 카드 초기화 실패!");
+    return;
+  }
+  Serial.println("SD 카드가 준비되었습니다.");
+  
+  // RTC 초기화
+  if (!rtc.begin()) {
+    Serial.println("RTC 초기화 실패!");
+    return;
+  }
+
+  if (!rtc.isrunning()) {
+    Serial.println("RTC가 작동하지 않습니다. 시간 설정 중...");
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+
+  // 데이터 저장 테스트
+  logData("수경재배 데이터 로깅 시작");
+}
+
+void loop() {
+  // 현재 시간 가져오기
+  DateTime now = rtc.now();
+  
+  // 센서 데이터를 예시로 추가 (실제 센서 값을 읽는 코드 추가 필요)
+  float sensorValue = analogRead(A0); // 가상 센서 값
+  
+  // 데이터를 문자열로 형식화하여 저장
+  String dataString = "";
+  dataString += String(now.year()) + "/" + String(now.month()) + "/" + String(now.day()) + " ";
+  dataString += String(now.hour()) + ":" + String(now.minute()) + ":" + String(now.second()) + ",";
+  dataString += "Sensor Value: " + String(sensorValue);
+  
+  logData(dataString);
+  
+  delay(1000);
+}
+
+void logData(String data) {
+  // 데이터 파일 열기
+  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  
+  // 데이터 기록
+  if (dataFile) {
+    dataFile.println(data);
+    dataFile.close();
+    Serial.println("데이터 기록 완료: " + data);
+  } else {
+    Serial.println("파일 열기 실패");
+  }
+}
