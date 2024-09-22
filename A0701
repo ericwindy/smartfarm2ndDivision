@@ -1,0 +1,30 @@
+#include <SD.h>
+#include <SPI.h>
+
+const int chipSelect = 4;
+
+void setup() {
+  Serial.begin(9600);
+  
+  if (!SD.begin(chipSelect)) {
+    Serial.println("SD 카드 초기화 실패!");
+    return;
+  }
+  Serial.println("SD 카드가 준비되었습니다.");
+  
+  // 데이터 저장 테스트
+  File dataFile = SD.open("data.txt", FILE_WRITE);
+  
+  if (dataFile) {
+    dataFile.println("수경재배 데이터 로깅 시작");
+    dataFile.close();
+    Serial.println("데이터 기록 완료");
+  } else {
+    Serial.println("파일 열기 실패");
+  }
+}
+
+void loop() {
+  // 센서 데이터를 읽어와서 기록하는 로직 추가
+  delay(1000);
+}
